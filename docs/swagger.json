@@ -1,0 +1,54 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Elliptic Curve Cryptography service API for IOT system",
+        "title": "ECC SERVICE API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "NGUYEN LE BAO TRUONG",
+            "url": "https://github.com/allvisss",
+            "email": "truongnlbse140940@fpt.edu.vn"
+        },
+        "version": "0.0"
+    },
+    "paths": {
+        "/v1/test": {
+            "get": {
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Testing API GET method",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        }
+    }
+}
