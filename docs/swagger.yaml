@@ -1,4 +1,35 @@
 definitions:
+  api.Keypair:
+    properties:
+      Curve:
+        properties:
+          B:
+            type: integer
+          BitSize:
+            type: integer
+          Gx:
+            type: integer
+          Gy:
+            type: integer
+          "N":
+            type: integer
+          Name:
+            type: string
+          P:
+            type: integer
+        type: object
+      D:
+        type: integer
+      X:
+        type: integer
+      "Y":
+        type: integer
+    type: object
+  response.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
   response.Response:
     properties:
       code:
@@ -16,6 +47,69 @@ info:
   title: ECC SERVICE API
   version: "0.0"
 paths:
+  /v1/encrypt:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Plaintext
+        in: query
+        name: msg
+        type: string
+      - description: Keypair
+        in: body
+        name: priv
+        required: true
+        schema:
+          $ref: '#/definitions/api.Keypair'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Encrypt plaintext into ciphertex (using curve secp112r1 as demo)
+      tags:
+      - Encrypt
+  /v1/keygen:
+    get:
+      consumes:
+      - '*/*'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Generate key pair (using curve secp112r1 as demo)
+      tags:
+      - Key
   /v1/test:
     get:
       consumes:
@@ -26,10 +120,20 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/response.Response'
-            type: array
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
       summary: Testing API GET method
       tags:
-      - Auth
+      - Test
 swagger: "2.0"

@@ -18,11 +18,12 @@ func NewTestHandler(r *gin.Engine) {
 
 //Test GET
 // @Summary Testing API GET method
-// @Tags Auth
+// @Tags Test
 // @Accept  */*
 // @Produce  json
 // @Router /v1/test [get]
-// @Success 200 {object} []response.Response
+// @Success 200 {object} response.Response
+// @Failure 400,404,500 {object} response.ErrorResponse
 func (data *TestHandler) TestGET(c *gin.Context) {
 	code, result := response.NewOKResponse("API Working")
 	c.JSON(code, result)

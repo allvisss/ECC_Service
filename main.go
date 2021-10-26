@@ -24,6 +24,8 @@ func main() {
 	r := gin.Default()
 	api.SwaggerHandler(r)
 	api.NewTestHandler(r)
+	api.NewKeyGenerateHandler(r)
+	api.NewEncryptHandler(r)
 
 	r.Run("localhost:8080")
 }
