@@ -1,29 +1,29 @@
 definitions:
   api.Keypair:
     properties:
-      Curve:
+      D:
+        type: string
+      X:
+        type: string
+      "Y":
+        type: string
+      curve:
         properties:
           B:
-            type: integer
+            type: string
           BitSize:
             type: integer
           Gx:
-            type: integer
+            type: string
           Gy:
-            type: integer
+            type: string
           "N":
-            type: integer
+            type: string
           Name:
             type: string
           P:
-            type: integer
+            type: string
         type: object
-      D:
-        type: integer
-      X:
-        type: integer
-      "Y":
-        type: integer
     type: object
   response.ErrorResponse:
     properties:
@@ -47,6 +47,80 @@ info:
   title: ECC SERVICE API
   version: "0.0"
 paths:
+  /v1/decrypt:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ciphertext
+        in: query
+        name: ciphertext
+        type: string
+      - description: Keypair
+        in: body
+        name: priv
+        required: true
+        schema:
+          $ref: '#/definitions/api.Keypair'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Decrypt ciphertext into plaintext (using curve secp112r1 as demo)
+      tags:
+      - Decrypt
+  /v1/decrypt2:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ciphertext
+        in: query
+        name: ciphertext
+        type: string
+      - description: Keypair
+        in: body
+        name: priv
+        required: true
+        schema:
+          $ref: '#/definitions/api.Keypair'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Decrypt ciphertext into plaintext
+      tags:
+      - Decrypt
   /v1/encrypt:
     post:
       consumes:
@@ -81,7 +155,44 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: Encrypt plaintext into ciphertex (using curve secp112r1 as demo)
+      summary: Encrypt plaintext into ciphertext (using curve secp112r1 as demo)
+      tags:
+      - Encrypt
+  /v1/encrypt2:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Plaintext
+        in: query
+        name: msg
+        type: string
+      - description: Key
+        in: body
+        name: priv
+        required: true
+        schema:
+          $ref: '#/definitions/api.Keypair'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Encrypt plaintext into ciphertext
       tags:
       - Encrypt
   /v1/keygen:
@@ -110,10 +221,41 @@ paths:
       summary: Generate key pair (using curve secp112r1 as demo)
       tags:
       - Key
-  /v1/test:
+  /v1/keygen2:
     get:
       consumes:
       - '*/*'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Generate key pair
+      tags:
+      - Key
+  /v1/testDecrypt:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Plaintext
+        in: query
+        name: plaintext
+        type: string
       produces:
       - application/json
       responses:
@@ -133,7 +275,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: Testing API GET method
+      summary: Testing decrypt method
       tags:
       - Test
 swagger: "2.0"

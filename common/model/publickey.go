@@ -3,6 +3,7 @@ package model
 import (
 	"bytes"
 	"crypto/elliptic"
+	"fmt"
 	"math/big"
 )
 
@@ -39,4 +40,25 @@ func (k *PublicKey) Bytes(compressed bool) []byte {
 	}
 
 	return bytes.Join([][]byte{{0x04}, x, y}, nil)
+}
+
+// Decapsulate decapsulates key by using Key Encapsulation Mechanism and returns symmetric key;
+// can be safely used as encryption key
+func (k *PublicKey) Decapsulate(priv *PrivateKey) ([]byte, error) {
+	if priv == nil {
+		return nil, fmt.Errorf("public key is empty")
+	}
+
+	var secret bytes.Buffer
+	secret.Write(k.Bytes(false))
+
+	sx, sy := priv.Curve.ScalarMult(k.X, k.Y, priv.D.Bytes())
+	secret.Write([]byte{0x04})
+
+	// Sometimes shared secret coordinates are less than 32 bytes; Big Endian
+	l := len(priv.Curve.Params().P.Bytes())
+	secret.Write(zeroPad(sx.Bytes(), l))
+	secret.Write(zeroPad(sy.Bytes(), l))
+
+	return kdf(secret.Bytes())
 }

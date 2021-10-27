@@ -26,6 +26,7 @@ func main() {
 	api.NewTestHandler(r)
 	api.NewKeyGenerateHandler(r)
 	api.NewEncryptHandler(r)
+	api.NewDecryptHandler(r)
 
 	r.Run("localhost:8080")
 }

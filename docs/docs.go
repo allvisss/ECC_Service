@@ -28,6 +28,120 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/decrypt": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Decrypt"
+                ],
+                "summary": "Decrypt ciphertext into plaintext (using curve secp112r1 as demo)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Ciphertext",
+                        "name": "ciphertext",
+                        "in": "query"
+                    },
+                    {
+                        "description": "Keypair",
+                        "name": "priv",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Keypair"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/decrypt2": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Decrypt"
+                ],
+                "summary": "Decrypt ciphertext into plaintext",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Ciphertext",
+                        "name": "ciphertext",
+                        "in": "query"
+                    },
+                    {
+                        "description": "Keypair",
+                        "name": "priv",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Keypair"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/encrypt": {
             "post": {
                 "consumes": [
@@ -39,7 +153,7 @@ var doc = `{
                 "tags": [
                     "Encrypt"
                 ],
-                "summary": "Encrypt plaintext into ciphertex (using curve secp112r1 as demo)",
+                "summary": "Encrypt plaintext into ciphertext (using curve secp112r1 as demo)",
                 "parameters": [
                     {
                         "type": "string",
@@ -49,6 +163,63 @@ var doc = `{
                     },
                     {
                         "description": "Keypair",
+                        "name": "priv",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Keypair"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/encrypt2": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Encrypt"
+                ],
+                "summary": "Encrypt plaintext into ciphertext",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Plaintext",
+                        "name": "msg",
+                        "in": "query"
+                    },
+                    {
+                        "description": "Key",
                         "name": "priv",
                         "in": "body",
                         "required": true,
@@ -125,7 +296,7 @@ var doc = `{
                 }
             }
         },
-        "/v1/test": {
+        "/v1/keygen2": {
             "get": {
                 "consumes": [
                     "*/*"
@@ -134,9 +305,57 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
+                    "Key"
+                ],
+                "summary": "Generate key pair",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/testDecrypt": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
                     "Test"
                 ],
-                "summary": "Testing API GET method",
+                "summary": "Testing decrypt method",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Plaintext",
+                        "name": "plaintext",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -170,40 +389,40 @@ var doc = `{
         "api.Keypair": {
             "type": "object",
             "properties": {
-                "Curve": {
+                "D": {
+                    "type": "string"
+                },
+                "X": {
+                    "type": "string"
+                },
+                "Y": {
+                    "type": "string"
+                },
+                "curve": {
                     "type": "object",
                     "properties": {
                         "B": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "BitSize": {
                             "type": "integer"
                         },
                         "Gx": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "Gy": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "N": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "Name": {
                             "type": "string"
                         },
                         "P": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
-                },
-                "D": {
-                    "type": "integer"
-                },
-                "X": {
-                    "type": "integer"
-                },
-                "Y": {
-                    "type": "integer"
                 }
             }
         },
